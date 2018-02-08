@@ -26,7 +26,7 @@
 <form class="upload-form" id="upload-select-image" method="post" enctype="multipart/form-data" autocomplete="off">
   <div class="upload-image">
     <input type="file" id="upload-file" class="upload-input" name="filename" required>
-    <label class="upload-file upload-control" for="upload-file"></label>
+    <label class="upload-file upload-control" for="upload-file" tabindex="0"></label>
   </div>
 
   <div class="upload-overlay hidden">
@@ -130,7 +130,7 @@
 
 
 <div class="gallery-overlay hidden">
-  <span class="gallery-overlay-close">&times;</span>
+  <span class="gallery-overlay-close" tabindex="0">&times;</span>
   <div class="gallery-overlay-preview">
     <img src="" class="gallery-overlay-image" alt="">
     <div class="gallery-overlay-controls">
