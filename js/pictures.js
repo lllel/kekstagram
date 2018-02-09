@@ -15,15 +15,6 @@ var ButtonKeyCode = {
   ENTER: 13
 };
 
-// ЗАГОТОВКА
-// var filteredStyle = {
-//   'effect-chrome': 'grayscale(0..1)',
-//   'effect-sepia': 'sepia(0..1)',
-//   'effect-marvin': 'invert(0..100%)',
-//   'effect-phobos': 'blur(0..3px)',
-//   'effect-heat': 'brightness(0..3)'
-// };
-
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
@@ -138,7 +129,11 @@ var onButtonInputEnterPress = function (evt) {
   buttonUploadPhoto.removeEventListener('keydown', onButtonInputEnterPress);
 };
 
-uploadInput.addEventListener('change', onButtonInputChange);
+uploadInput.addEventListener('click', function (evt) {
+  evt.preventDefault();
+
+  onButtonInputChange();
+});
 buttonUploadPhoto.addEventListener('keydown', onButtonInputEnterPress);
 
 // ЗАКРЫТИЕ МЕНЮ ФОРМЫ
@@ -147,6 +142,7 @@ var onButtonCloseFormClick = function () {
 
   formImages.classList.add('hidden');
   document.removeEventListener('keydown', onButtonCloseFormEscPress);
+  buttonUploadPhoto.addEventListener('keydown', onButtonInputEnterPress);
 };
 
 var onButtonCloseFormEscPress = function (evt) {
@@ -155,6 +151,7 @@ var onButtonCloseFormEscPress = function (evt) {
   });
 
   uploadInput.value = '';
+  buttonUploadPhoto.addEventListener('keydown', onButtonInputEnterPress);
 };
 
 buttonFormClose.addEventListener('click', onButtonCloseFormClick);
@@ -223,6 +220,3 @@ var lineUpload = formUpload.querySelector('.upload-effect-level-line');
 pinUpload.addEventListener('mouseup', function () {
   valueUpload.value = (parseInt(getComputedStyle(pinUpload).left, 10) * 100 / parseInt(getComputedStyle(lineUpload).width, 10)).toFixed(0);
 });
-
-// ХЭШ-ТЕГИ
-// var hashTagInput = formUpload.querySelector('.upload-form-hashtags');
