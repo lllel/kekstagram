@@ -142,6 +142,7 @@ buttonUploadPhoto.addEventListener('keydown', onButtonInputEnterPress);
 // ЗАКРЫТИЕ МЕНЮ ФОРМЫ
 var onButtonCloseFormClick = function () {
   uploadInput.value = '';
+  formUpload.reset();
 
   formImages.classList.add('hidden');
   document.removeEventListener('keydown', onButtonCloseFormEscPress);
@@ -154,6 +155,7 @@ var onButtonCloseFormEscPress = function (evt) {
   });
 
   uploadInput.value = '';
+  formUpload.reset();
   buttonUploadPhoto.addEventListener('keydown', onButtonInputEnterPress);
 };
 
@@ -243,33 +245,42 @@ var uploadResizeContainer = formUpload.querySelector('.upload-resize-controls');
 
 uploadResizeValue.value = '100%';
 
+var PERCENT = {
+  step: 25,
+  max: 100
+};
+
+var incPercent = function (percent) {
+  percent += PERCENT.step;
+
+  if (percent > PERCENT.max) {
+    percent = PERCENT.max;
+  }
+  return percent;
+};
+
+var decPercent = function (percent) {
+  percent -= PERCENT.step;
+
+  if (percent < PERCENT.step) {
+    percent = PERCENT.step;
+  }
+  return percent;
+};
+
 var onButtonResizeValueClick = function (evt) {
+  var percent = '';
+
   if (evt.target.classList.contains('upload-resize-controls-button-inc')) {
-
-    if (parseInt(uploadResizeValue.value, 10) === 100) {
-      uploadResizeValue.value = '100%';
-
-    } else {
-      uploadResizeValue.value = parseInt(uploadResizeValue.value, 10) + 25 + '%';
-    }
+    percent = incPercent(parseInt(uploadResizeValue.value, 10));
   }
 
   if (evt.target.classList.contains('upload-resize-controls-button-dec')) {
-
-    if (parseInt(uploadResizeValue.value, 10) === 25) {
-      uploadResizeValue.value = '25%';
-
-    } else {
-      uploadResizeValue.value = parseInt(uploadResizeValue.value, 10) - 25 + '%';
-    }
+    percent = decPercent(parseInt(uploadResizeValue.value, 10));
   }
 
-  if (parseInt(uploadResizeValue.value, 10) === 100) {
-    photoEffectPreviewUpload.style.transform = 'scale(1)';
-
-  } else {
-    photoEffectPreviewUpload.style.transform = 'scale(0.' + parseInt(uploadResizeValue.value, 10) + ')';
-  }
+  uploadResizeValue.value = percent + '%';
+  photoEffectPreviewUpload.style.transform = 'scale(' + (percent / 100) + ')';
 };
 
 uploadResizeContainer.addEventListener('click', function (evt) {
