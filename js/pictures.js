@@ -32,12 +32,10 @@ var isEnterPressEvent = function (evt, cb) {
   }
 };
 
-var getPhoto = function (i) {
-  return {
-    url: 'photos/' + (i + 1) + '.jpg',
-    likes: getRandomNumber(15, 200) + '',
-    comments: getRandomNumber(0, COMMENTS.length - 1)
-  };
+var GetPhoto = function (i) {
+  this.url = 'photos/' + (i + 1) + '.jpg';
+  this.likes = getRandomNumber(15, 200) + '';
+  this.comments = getRandomNumber(0, COMMENTS.length - 1);
 };
 
 var getRenderPhoto = function (photo) {
@@ -58,7 +56,7 @@ var getRenderPhoto = function (photo) {
 
 var addPhotoInArray = function () {
   for (var i = 0; i < QUANTITY_PHOTOS; i++) {
-    PHOTOS.push(getPhoto(i));
+    PHOTOS.push(new GetPhoto(i));
   }
 };
 addPhotoInArray();
@@ -218,9 +216,12 @@ var onHiddenSliderClick = function () {
 onHiddenSliderClick();
 
 var onCheckboxEffectChange = function (evt) {
-  if (photoEffectPreviewUpload.classList[1]) {
-    photoEffectPreviewUpload.classList.remove(photoEffectPreviewUpload.classList[1]);
-  }
+  [].forEach.call(Object.keys(FilteredStyle), function (it) {
+    if (photoEffectPreviewUpload.classList.contains(it)) {
+      photoEffectPreviewUpload.classList.remove(it);
+    }
+  });
+
   photoEffectPreviewUpload.classList.add((evt.target.id).slice(7));
   FilteredStyle[(evt.target.id).slice(7)]();
 
@@ -277,6 +278,10 @@ var onButtonResizeValueClick = function (evt) {
 
   if (evt.target.classList.contains('upload-resize-controls-button-dec')) {
     percent = decPercent(parseInt(uploadResizeValue.value, 10));
+  }
+
+  if (evt.target.classList.contains('upload-resize-controls-value')) {
+    return;
   }
 
   uploadResizeValue.value = percent + '%';
