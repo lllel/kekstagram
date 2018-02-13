@@ -312,41 +312,35 @@ var onBtnCheckValidityHashtagClick = function () {
 
     if (it.length > 20) {
       hashTagInput.setCustomValidity(HashtagError.maxLength);
-      hashTagInput.valid = true;
 
       return false;
     }
 
     if (value !== '' && it.charAt(0) !== '#') {
       hashTagInput.setCustomValidity(HashtagError.type);
-      hashTagInput.valid = true;
 
       return false;
     }
 
     if (value.split(' ').length > 5) {
       hashTagInput.setCustomValidity(HashtagError.count);
-      hashTagInput.valid = true;
 
       return false;
     }
 
     if (/--/.test(it)) {
       hashTagInput.setCustomValidity(HashtagError.hyphen);
-      hashTagInput.valid = true;
 
       return false;
     }
 
     if (value.split(' ').sort()[i].toLowerCase() === value.split(' ').sort()[i + 1]) {
       hashTagInput.setCustomValidity(HashtagError.copy);
-      hashTagInput.valid = true;
 
       return true;
     }
 
     hashTagInput.setCustomValidity('');
-    hashTagInput.valid = false;
 
     return true;
   });
@@ -363,15 +357,12 @@ var onBtnCheckValidityCommentClick = function () {
   var value = commentTextarea.value;
 
   if (value !== '' && value.length > 140) {
-
     commentTextarea.setCustomValidity(CommentError.maxLength);
-    commentTextarea.valid = true;
 
     return false;
   }
 
   hashTagInput.setCustomValidity('');
-  hashTagInput.valid = false;
 
   return true;
 };
