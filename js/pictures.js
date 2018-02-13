@@ -362,7 +362,7 @@ var CommentError = {
 var onBtnCheckValidityCommentClick = function () {
   var value = commentTextarea.value;
 
-  if (value !== '' && value.length > 140) {
+  if (value !== '' && value.length > 5) {
 
     commentTextarea.setCustomValidity(CommentError.maxLength);
     commentTextarea.valid = false;
@@ -382,7 +382,10 @@ commentTextarea.addEventListener('keydown', function (evt) {
   }
 });
 
+hashTagInput.addEventListener('input', function () {
+  onBtnCheckValidityHashtagClick();
+});
+
 uploadFormSubmit.addEventListener('click', function () {
   onBtnCheckValidityCommentClick();
-  onBtnCheckValidityHashtagClick();
 });
