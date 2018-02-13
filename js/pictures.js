@@ -150,10 +150,10 @@ var onButtonCloseFormClick = function () {
 var onButtonCloseFormEscPress = function (evt) {
   isEscPressEvent(evt, function () {
     formImages.classList.add('hidden');
+    uploadInput.value = '';
+    formUpload.reset();
   });
 
-  uploadInput.value = '';
-  formUpload.reset();
   buttonUploadPhoto.addEventListener('keydown', onButtonInputEnterPress);
 };
 
@@ -290,4 +290,99 @@ var onButtonResizeValueClick = function (evt) {
 
 uploadResizeContainer.addEventListener('click', function (evt) {
   onButtonResizeValueClick(evt);
+});
+
+// ХЭШТЕГ
+var hashTagInput = document.querySelector('.upload-form-hashtags');
+var uploadFormSubmit = document.querySelector('.upload-form-submit');
+
+var HashtagError = {
+  maxLength: 'Максимальная длина одного хэштега не более 20-ти символов',
+  count: 'Нельзя использовать больше 5ти хэштегов',
+  copy: 'Хэштеги повторяются',
+  type: 'Хэштег начинается с символа #',
+  hyphen: 'Нельзя более одного дефиса подряд'
+};
+
+var onBtnCheckValidityHashtagClick = function () {
+  var value = hashTagInput.value;
+
+  [].forEach.call(value.split(' ').sort(), function (it, i) {
+    it.toLowerCase();
+
+    if (it.length > 20) {
+      hashTagInput.setCustomValidity(HashtagError.maxLength);
+      hashTagInput.valid = false;
+
+      return false;
+    }
+
+    if (value !== '' && it.charAt(0) !== '#') {
+      hashTagInput.setCustomValidity(HashtagError.type);
+      hashTagInput.valid = false;
+
+      return false;
+    }
+
+    if (value.split(' ').length > 5) {
+      hashTagInput.setCustomValidity(HashtagError.count);
+      hashTagInput.valid = false;
+
+      return false;
+    }
+
+    if (/--/.test(it)) {
+      hashTagInput.setCustomValidity(HashtagError.hyphen);
+      hashTagInput.valid = false;
+
+      return false;
+    }
+
+    if (value.split(' ').sort()[i].toLowerCase() === value.split(' ').sort()[i + 1]) {
+      hashTagInput.setCustomValidity(HashtagError.copy);
+      hashTagInput.valid = false;
+
+      return true;
+    }
+
+    hashTagInput.setCustomValidity('');
+    hashTagInput.valid = true;
+
+    return true;
+  });
+};
+
+// КОММЕНТАРИИ
+var commentTextarea = formUpload.querySelector('.upload-form-description');
+
+var CommentError = {
+  maxLength: 'Максимальная длина комментария не более 140 символов'
+};
+
+var onBtnCheckValidityCommentClick = function () {
+  var value = commentTextarea.value;
+
+  if (value !== '' && value.length > 140) {
+
+    commentTextarea.setCustomValidity(CommentError.maxLength);
+    commentTextarea.valid = false;
+
+    return false;
+  }
+
+  hashTagInput.setCustomValidity('');
+  hashTagInput.valid = true;
+
+  return true;
+};
+
+commentTextarea.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === 27) {
+    evt.stopPropagation();
+  }
+});
+
+uploadFormSubmit.addEventListener('click', function () {
+  onBtnCheckValidityCommentClick();
+  onBtnCheckValidityHashtagClick();
 });
