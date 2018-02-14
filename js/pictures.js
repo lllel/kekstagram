@@ -120,6 +120,10 @@ var buttonUploadPhoto = formUpload.querySelector('.upload-file.upload-control');
 var onButtonInputChange = function () {
   formImages.classList.remove('hidden');
   document.addEventListener('keydown', onButtonCloseFormEscPress);
+
+  photoEffectPreviewUpload.style.filter = '';
+  photoEffectPreviewUpload.style.transform = 'scale(1)';
+  getRemoveClass(FilteredStyle, photoEffectPreviewUpload);
 };
 
 var onButtonInputEnterPress = function (evt) {
@@ -130,7 +134,7 @@ var onButtonInputEnterPress = function (evt) {
   buttonUploadPhoto.removeEventListener('keydown', onButtonInputEnterPress);
 };
 
-uploadInput.addEventListener('click', function (evt) {
+uploadInput.addEventListener('change', function (evt) {
   evt.preventDefault();
 
   onButtonInputChange();
@@ -221,6 +225,7 @@ var onShowSliderClick = function () {
 var onHiddenSliderClick = function () {
   sliderUpload.style.display = 'none';
 };
+
 onHiddenSliderClick();
 
 var onCheckboxEffectChange = function (evt) {
@@ -310,20 +315,25 @@ var HashtagError = {
   hyphen: 'Нельзя более одного дефиса подряд'
 };
 
+var HashtagValidity = {
+  MAX_COUNT: 5,
+  MAX_LENGTH: 20
+};
+
 var onBtnCheckValidityHashtagClick = function () {
   var value = hashTagInput.value.trim();
   var parts = value.split(' ').map(function (item) {
     return item.toLowerCase();
   });
 
-  if (parts.length > 5) {
+  if (parts.length > HashtagValidity.MAX_COUNT) {
     hashTagInput.setCustomValidity(HashtagError.count);
 
     return false;
   }
 
   parts.forEach(function (it) {
-    if (it.length > 20) {
+    if (it.length > HashtagValidity.MAX_LENGTH) {
       hashTagInput.setCustomValidity(HashtagError.maxLength);
 
       return false;
@@ -343,9 +353,10 @@ var onBtnCheckValidityHashtagClick = function () {
       hashTagInput.setCustomValidity(HashtagError.copy);
 
       return false;
-    }
 
-    return true;
+    } else {
+      return true;
+    }
   });
 
   hashTagInput.setCustomValidity('');
