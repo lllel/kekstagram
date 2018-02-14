@@ -321,7 +321,7 @@ var HashtagValidity = {
 };
 
 var onBtnCheckValidityHashtagClick = function () {
-  var value = hashTagInput.value.trim();
+  var value = hashTagInput.value;
   var parts = value.split(' ').map(function (item) {
     return item.toLowerCase();
   });
@@ -353,10 +353,11 @@ var onBtnCheckValidityHashtagClick = function () {
       hashTagInput.setCustomValidity(HashtagError.copy);
 
       return false;
-
-    } else {
-      return true;
     }
+
+    hashTagInput.setCustomValidity('');
+
+    return true;
   });
 
   hashTagInput.setCustomValidity('');
@@ -364,12 +365,8 @@ var onBtnCheckValidityHashtagClick = function () {
   return true;
 };
 
-hashTagInput.addEventListener('input', function (evt) {
-  if (hashTagInput.validity.valid) {
-    onBtnCheckValidityHashtagClick();
-  }
-
-  evt.preventDefault();
+hashTagInput.addEventListener('input', function () {
+  onBtnCheckValidityHashtagClick();
 });
 
 // // КОММЕНТАРИИ
