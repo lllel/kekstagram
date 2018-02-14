@@ -168,6 +168,14 @@ var pinUpload = formUpload.querySelector('.upload-effect-level-pin');
 var lineUpload = formUpload.querySelector('.upload-effect-level-line');
 var sliderUpload = formUpload.querySelector('.upload-effect-level');
 
+var getRemoveClass = function (keyObj, element) {
+  [].forEach.call(Object.keys(keyObj), function (it) {
+    if (element.classList.contains(it)) {
+      element.classList.remove(it);
+    }
+  });
+};
+
 var FilteredStyle = {
   'effect-none': function () {
     onHiddenSliderClick();
@@ -178,31 +186,31 @@ var FilteredStyle = {
   'effect-chrome': function () {
     onShowSliderClick();
 
-    photoEffectPreviewUpload.style.filter = 'grayscale(0..1)';
+    photoEffectPreviewUpload.style.filter = 'grayscale(' + (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + ')';
   },
 
   'effect-sepia': function () {
     onShowSliderClick();
 
-    photoEffectPreviewUpload.style.filter = 'sepia(0..1)';
+    photoEffectPreviewUpload.style.filter = 'sepia(' + (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + ')';
   },
 
   'effect-marvin': function () {
     onShowSliderClick();
 
-    photoEffectPreviewUpload.style.filter = 'invert(0..100%)';
+    photoEffectPreviewUpload.style.filter = 'invert(' + 100 * (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + '%)';
   },
 
   'effect-phobos': function () {
     onShowSliderClick();
 
-    photoEffectPreviewUpload.style.filter = 'blur(0..3px)';
+    photoEffectPreviewUpload.style.filter = 'blur(' + 3 * (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + 'px)';
   },
 
   'effect-heat': function () {
     onShowSliderClick();
 
-    photoEffectPreviewUpload.style.filter = 'brightness(0..3)';
+    photoEffectPreviewUpload.style.filter = 'brightness(' + 3 * (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + ')';
   }
 };
 
@@ -216,17 +224,10 @@ var onHiddenSliderClick = function () {
 onHiddenSliderClick();
 
 var onCheckboxEffectChange = function (evt) {
-  [].forEach.call(Object.keys(FilteredStyle), function (it) {
-    if (photoEffectPreviewUpload.classList.contains(it)) {
-      photoEffectPreviewUpload.classList.remove(it);
-    }
-  });
+  getRemoveClass(FilteredStyle, photoEffectPreviewUpload);
 
   photoEffectPreviewUpload.classList.add((evt.target.id).slice(7));
   FilteredStyle[(evt.target.id).slice(7)]();
-
-  pinUpload.style.left = '100%';
-  valueUpload.style.width = '100%';
 };
 
 pinUpload.style.left = '100%';
@@ -238,6 +239,12 @@ photoEffectUpload.addEventListener('change', function (evt) {
 
 pinUpload.addEventListener('mouseup', function () {
   valueUpload.style.width = (parseInt(getComputedStyle(pinUpload).left, 10) * 100 / parseInt(getComputedStyle(lineUpload).width, 10)).toFixed(0) + '%';
+
+  [].forEach.call(Object.keys(FilteredStyle), function (it) {
+    if (photoEffectPreviewUpload.classList.contains(it)) {
+      FilteredStyle[it]();
+    }
+  });
 });
 
 // ИЗМЕНЕНИЕ РЕСАЙЗА ПРЕВЬЮ-ФОТО
@@ -294,7 +301,6 @@ uploadResizeContainer.addEventListener('click', function (evt) {
 
 // ХЭШТЕГ
 var hashTagInput = document.querySelector('.upload-form-hashtags');
-var uploadFormSubmit = document.querySelector('.upload-form-submit');
 
 var HashtagError = {
   maxLength: 'Максимальная длина одного хэштега не более 20-ти символов',
@@ -305,11 +311,18 @@ var HashtagError = {
 };
 
 var onBtnCheckValidityHashtagClick = function () {
-  var value = hashTagInput.value;
+  var value = hashTagInput.value.trim();
+  var parts = value.split(' ').map(function (item) {
+    return item.toLowerCase();
+  });
 
-  [].forEach.call(value.split(' ').sort(), function (it, i) {
-    it.toLowerCase();
+  if (parts.length > 5) {
+    hashTagInput.setCustomValidity(HashtagError.count);
 
+    return false;
+  }
+
+  parts.forEach(function (it) {
     if (it.length > 20) {
       hashTagInput.setCustomValidity(HashtagError.maxLength);
 
@@ -322,61 +335,33 @@ var onBtnCheckValidityHashtagClick = function () {
       return false;
     }
 
-    if (value.split(' ').length > 5) {
-      hashTagInput.setCustomValidity(HashtagError.count);
+    var repeated = parts.filter(function (item) {
+      return item === it;
+    });
 
-      return false;
-    }
-
-    if (/--/.test(it)) {
-      hashTagInput.setCustomValidity(HashtagError.hyphen);
-
-      return false;
-    }
-
-    if (value.split(' ').sort()[i].toLowerCase() === value.split(' ').sort()[i + 1]) {
+    if (repeated.length > 1) {
       hashTagInput.setCustomValidity(HashtagError.copy);
 
-      return true;
+      return false;
     }
-
-    hashTagInput.setCustomValidity('');
 
     return true;
   });
-};
-
-// КОММЕНТАРИИ
-var commentTextarea = formUpload.querySelector('.upload-form-description');
-
-var CommentError = {
-  maxLength: 'Максимальная длина комментария не более 140 символов'
-};
-
-var onBtnCheckValidityCommentClick = function () {
-  var value = commentTextarea.value;
-
-  if (value !== '' && value.length > 140) {
-    commentTextarea.setCustomValidity(CommentError.maxLength);
-
-    return false;
-  }
 
   hashTagInput.setCustomValidity('');
 
   return true;
 };
 
-commentTextarea.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === 27) {
-    evt.stopPropagation();
-  }
-});
-
 hashTagInput.addEventListener('input', function () {
   onBtnCheckValidityHashtagClick();
 });
 
-uploadFormSubmit.addEventListener('click', function () {
-  onBtnCheckValidityCommentClick();
+// // КОММЕНТАРИИ
+var commentTextarea = formUpload.querySelector('.upload-form-description');
+
+commentTextarea.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ButtonKeyCode.ESC) {
+    evt.stopPropagation();
+  }
 });
