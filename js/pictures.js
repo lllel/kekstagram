@@ -364,8 +364,12 @@ var onBtnCheckValidityHashtagClick = function () {
   return true;
 };
 
-hashTagInput.addEventListener('input', function () {
-  onBtnCheckValidityHashtagClick();
+hashTagInput.addEventListener('input', function (evt) {
+  if (hashTagInput.validity.valid) {
+    onBtnCheckValidityHashtagClick();
+  }
+
+  evt.preventDefault();
 });
 
 // // КОММЕНТАРИИ
