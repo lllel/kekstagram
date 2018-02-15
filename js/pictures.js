@@ -321,10 +321,8 @@ var HashtagValidity = {
 };
 
 var onBtnCheckValidityHashtagClick = function () {
-  var value = hashTagInput.value;
-  var parts = value.split(' ').map(function (item) {
-    return item.toLowerCase();
-  });
+  var value = hashTagInput.value.toLowerCase().trim();
+  var parts = value.split(' ');
 
   if (parts.length > HashtagValidity.MAX_COUNT) {
     hashTagInput.setCustomValidity(HashtagError.count);
@@ -332,21 +330,21 @@ var onBtnCheckValidityHashtagClick = function () {
     return false;
   }
 
-  parts.forEach(function (it) {
-    if (it.length > HashtagValidity.MAX_LENGTH) {
+  for (var i = 0; i < parts.length; i++) {
+    if (parts[i].length > HashtagValidity.MAX_LENGTH) {
       hashTagInput.setCustomValidity(HashtagError.maxLength);
 
       return false;
     }
 
-    if (value !== '' && it.charAt(0) !== '#') {
+    if (value !== '' && parts[i].charAt(0) !== '#') {
       hashTagInput.setCustomValidity(HashtagError.type);
 
       return false;
     }
 
     var repeated = parts.filter(function (item) {
-      return item === it;
+      return item === parts[i];
     });
 
     if (repeated.length > 1) {
@@ -356,11 +354,7 @@ var onBtnCheckValidityHashtagClick = function () {
     }
 
     hashTagInput.setCustomValidity('');
-
-    return true;
-  });
-
-  hashTagInput.setCustomValidity('');
+  }
 
   return true;
 };
