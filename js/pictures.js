@@ -120,6 +120,10 @@ var buttonUploadPhoto = formUpload.querySelector('.upload-file.upload-control');
 var onButtonInputChange = function () {
   formImages.classList.remove('hidden');
   document.addEventListener('keydown', onButtonCloseFormEscPress);
+
+  photoEffectPreviewUpload.style.filter = '';
+  photoEffectPreviewUpload.style.transform = 'scale(1)';
+  getRemoveClass(FilteredStyle, photoEffectPreviewUpload);
 };
 
 var onButtonInputEnterPress = function (evt) {
@@ -130,7 +134,7 @@ var onButtonInputEnterPress = function (evt) {
   buttonUploadPhoto.removeEventListener('keydown', onButtonInputEnterPress);
 };
 
-uploadInput.addEventListener('click', function (evt) {
+uploadInput.addEventListener('change', function (evt) {
   evt.preventDefault();
 
   onButtonInputChange();
@@ -150,10 +154,10 @@ var onButtonCloseFormClick = function () {
 var onButtonCloseFormEscPress = function (evt) {
   isEscPressEvent(evt, function () {
     formImages.classList.add('hidden');
+    uploadInput.value = '';
+    formUpload.reset();
   });
 
-  uploadInput.value = '';
-  formUpload.reset();
   buttonUploadPhoto.addEventListener('keydown', onButtonInputEnterPress);
 };
 
@@ -168,6 +172,14 @@ var pinUpload = formUpload.querySelector('.upload-effect-level-pin');
 var lineUpload = formUpload.querySelector('.upload-effect-level-line');
 var sliderUpload = formUpload.querySelector('.upload-effect-level');
 
+var getRemoveClass = function (keyObj, element) {
+  [].forEach.call(Object.keys(keyObj), function (it) {
+    if (element.classList.contains(it)) {
+      element.classList.remove(it);
+    }
+  });
+};
+
 var FilteredStyle = {
   'effect-none': function () {
     onHiddenSliderClick();
@@ -178,31 +190,31 @@ var FilteredStyle = {
   'effect-chrome': function () {
     onShowSliderClick();
 
-    photoEffectPreviewUpload.style.filter = 'grayscale(0..1)';
+    photoEffectPreviewUpload.style.filter = 'grayscale(' + (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + ')';
   },
 
   'effect-sepia': function () {
     onShowSliderClick();
 
-    photoEffectPreviewUpload.style.filter = 'sepia(0..1)';
+    photoEffectPreviewUpload.style.filter = 'sepia(' + (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + ')';
   },
 
   'effect-marvin': function () {
     onShowSliderClick();
 
-    photoEffectPreviewUpload.style.filter = 'invert(0..100%)';
+    photoEffectPreviewUpload.style.filter = 'invert(' + 100 * (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + '%)';
   },
 
   'effect-phobos': function () {
     onShowSliderClick();
 
-    photoEffectPreviewUpload.style.filter = 'blur(0..3px)';
+    photoEffectPreviewUpload.style.filter = 'blur(' + 3 * (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + 'px)';
   },
 
   'effect-heat': function () {
     onShowSliderClick();
 
-    photoEffectPreviewUpload.style.filter = 'brightness(0..3)';
+    photoEffectPreviewUpload.style.filter = 'brightness(' + 3 * (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + ')';
   }
 };
 
@@ -213,20 +225,14 @@ var onShowSliderClick = function () {
 var onHiddenSliderClick = function () {
   sliderUpload.style.display = 'none';
 };
+
 onHiddenSliderClick();
 
 var onCheckboxEffectChange = function (evt) {
-  [].forEach.call(Object.keys(FilteredStyle), function (it) {
-    if (photoEffectPreviewUpload.classList.contains(it)) {
-      photoEffectPreviewUpload.classList.remove(it);
-    }
-  });
+  getRemoveClass(FilteredStyle, photoEffectPreviewUpload);
 
   photoEffectPreviewUpload.classList.add((evt.target.id).slice(7));
   FilteredStyle[(evt.target.id).slice(7)]();
-
-  pinUpload.style.left = '100%';
-  valueUpload.style.width = '100%';
 };
 
 pinUpload.style.left = '100%';
@@ -238,6 +244,12 @@ photoEffectUpload.addEventListener('change', function (evt) {
 
 pinUpload.addEventListener('mouseup', function () {
   valueUpload.style.width = (parseInt(getComputedStyle(pinUpload).left, 10) * 100 / parseInt(getComputedStyle(lineUpload).width, 10)).toFixed(0) + '%';
+
+  [].forEach.call(Object.keys(FilteredStyle), function (it) {
+    if (photoEffectPreviewUpload.classList.contains(it)) {
+      FilteredStyle[it]();
+    }
+  });
 });
 
 // ИЗМЕНЕНИЕ РЕСАЙЗА ПРЕВЬЮ-ФОТО
@@ -290,4 +302,72 @@ var onButtonResizeValueClick = function (evt) {
 
 uploadResizeContainer.addEventListener('click', function (evt) {
   onButtonResizeValueClick(evt);
+});
+
+// ХЭШТЕГ
+var hashTagInput = document.querySelector('.upload-form-hashtags');
+
+var HashtagError = {
+  maxLength: 'Максимальная длина одного хэштега не более 20-ти символов',
+  count: 'Нельзя использовать больше 5ти хэштегов',
+  copy: 'Хэштеги повторяются',
+  type: 'Хэштег начинается с символа #',
+  hyphen: 'Нельзя более одного дефиса подряд'
+};
+
+var HashtagValidity = {
+  MAX_COUNT: 5,
+  MAX_LENGTH: 20
+};
+
+var onBtnCheckValidityHashtagClick = function () {
+  var value = hashTagInput.value.toLowerCase().trim();
+  var parts = value.split(' ');
+
+  if (parts.length > HashtagValidity.MAX_COUNT) {
+    hashTagInput.setCustomValidity(HashtagError.count);
+
+    return false;
+  }
+
+  for (var i = 0; i < parts.length; i++) {
+    if (parts[i].length > HashtagValidity.MAX_LENGTH) {
+      hashTagInput.setCustomValidity(HashtagError.maxLength);
+
+      return false;
+    }
+
+    if (value !== '' && parts[i].charAt(0) !== '#') {
+      hashTagInput.setCustomValidity(HashtagError.type);
+
+      return false;
+    }
+
+    var repeated = parts.filter(function (item) {
+      return item === parts[i];
+    });
+
+    if (repeated.length > 1) {
+      hashTagInput.setCustomValidity(HashtagError.copy);
+
+      return false;
+    }
+
+    hashTagInput.setCustomValidity('');
+  }
+
+  return true;
+};
+
+hashTagInput.addEventListener('input', function () {
+  onBtnCheckValidityHashtagClick();
+});
+
+// // КОММЕНТАРИИ
+var commentTextarea = formUpload.querySelector('.upload-form-description');
+
+commentTextarea.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ButtonKeyCode.ESC) {
+    evt.stopPropagation();
+  }
 });
