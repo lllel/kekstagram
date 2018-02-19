@@ -84,16 +84,6 @@
     onCheckboxEffectChange(evt);
   });
 
-  pinUpload.addEventListener('mouseup', function () {
-    valueUpload.style.width = (parseInt(getComputedStyle(pinUpload).left, 10) * 100 / parseInt(getComputedStyle(lineUpload).width, 10)).toFixed(0) + '%';
-
-    [].forEach.call(Object.keys(FilteredStyle), function (it) {
-      if (photoEffectPreviewUpload.classList.contains(it)) {
-        FilteredStyle[it]();
-      }
-    });
-  });
-
   window.applyFilter = {
     photoEffectPreviewUpload: photoEffectPreviewUpload,
     FilteredStyle: FilteredStyle
