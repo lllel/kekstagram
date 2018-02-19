@@ -3,10 +3,6 @@
 (function () {
   var photoEffectUpload = window.modal.formUpload.querySelector('.upload-effect-controls');
   var photoEffectPreviewUpload = window.modal.formUpload.querySelector('.effect-image-preview');
-  var valueUpload = window.modal.formUpload.querySelector('.upload-effect-level-val');
-  var pinUpload = window.modal.formUpload.querySelector('.upload-effect-level-pin');
-  var lineUpload = window.modal.formUpload.querySelector('.upload-effect-level-line');
-  var sliderUpload = window.modal.formUpload.querySelector('.upload-effect-level');
 
   var FilteredStyle = {
     'effect-none': function () {
@@ -18,40 +14,40 @@
     'effect-chrome': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'grayscale(' + (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + ')';
+      photoEffectPreviewUpload.style.filter = 'grayscale(' + (parseInt(getComputedStyle(window.slider.pinUpload).left, 10)) / parseInt(getComputedStyle(window.slider.lineUpload).width, 10).toFixed(2) + ')';
     },
 
     'effect-sepia': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'sepia(' + (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + ')';
+      photoEffectPreviewUpload.style.filter = 'sepia(' + (parseInt(getComputedStyle(window.slider.pinUpload).left, 10)) / parseInt(getComputedStyle(window.slider.lineUpload).width, 10).toFixed(2) + ')';
     },
 
     'effect-marvin': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'invert(' + 100 * (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + '%)';
+      photoEffectPreviewUpload.style.filter = 'invert(' + 100 * (parseInt(getComputedStyle(window.slider.pinUpload).left, 10)) / parseInt(getComputedStyle(window.slider.lineUpload).width, 10).toFixed(2) + '%)';
     },
 
     'effect-phobos': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'blur(' + 3 * (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + 'px)';
+      photoEffectPreviewUpload.style.filter = 'blur(' + 3 * (parseInt(getComputedStyle(window.slider.pinUpload).left, 10)) / parseInt(getComputedStyle(window.slider.lineUpload).width, 10).toFixed(2) + 'px)';
     },
 
     'effect-heat': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'brightness(' + 3 * (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2) + ')';
+      photoEffectPreviewUpload.style.filter = 'brightness(' + 3 * (parseInt(getComputedStyle(window.slider.pinUpload).left, 10)) / parseInt(getComputedStyle(window.slider.lineUpload).width, 10).toFixed(2) + ')';
     }
   };
 
   var onShowSliderClick = function () {
-    sliderUpload.style.display = 'block';
+    window.slider.sliderUpload.style.display = 'block';
   };
 
   var onHiddenSliderClick = function () {
-    sliderUpload.style.display = 'none';
+    window.slider.sliderUpload.style.display = 'none';
   };
 
   onHiddenSliderClick();
@@ -63,15 +59,15 @@
     FilteredStyle[(evt.target.id).slice(7)]();
   };
 
-  pinUpload.style.left = '100%';
-  valueUpload.style.width = '100%';
-
   photoEffectUpload.addEventListener('change', function (evt) {
+    window.slider.pinUpload.style.left = '100%';
+    window.slider.valueUpload.style.width = '100%';
+
     onCheckboxEffectChange(evt);
   });
 
-  pinUpload.addEventListener('mouseup', function () {
-    valueUpload.style.width = (parseInt(getComputedStyle(pinUpload).left, 10) * 100 / parseInt(getComputedStyle(lineUpload).width, 10)).toFixed(0) + '%';
+  window.slider.pinUpload.addEventListener('mouseup', function () {
+    window.slider.valueUpload.style.width = (parseInt(getComputedStyle(window.slider.pinUpload).left, 10) * 100 / parseInt(getComputedStyle(window.slider.lineUpload).width, 10)).toFixed(0) + '%';
 
     [].forEach.call(Object.keys(FilteredStyle), function (it) {
       if (photoEffectPreviewUpload.classList.contains(it)) {

@@ -13,12 +13,15 @@
 
     window.applyFilter.photoEffectPreviewUpload.style.filter = '';
     window.applyFilter.photoEffectPreviewUpload.style.transform = 'scale(1)';
+
+    window.applyFilter.FilteredStyle['effect-none']();
+
     window.util.getRemoveClass(window.applyFilter.FilteredStyle, window.applyFilter.photoEffectPreviewUpload);
   };
 
   var onButtonInputEnterPress = function (evt) {
     window.util.isEnterPressEvent(evt, function () {
-      formImages.classList.remove('hidden');
+      onButtonInputChange();
     });
 
     document.addEventListener('keydown', onButtonCloseFormEscPress);
