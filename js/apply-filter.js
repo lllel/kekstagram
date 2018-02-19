@@ -1,8 +1,16 @@
 'use strict';
 
 (function () {
+  var sliderUpload = window.modal.formUpload.querySelector('.upload-effect-level');
+  var valueUpload = window.modal.formUpload.querySelector('.upload-effect-level-val');
+  var pinUpload = window.modal.formUpload.querySelector('.upload-effect-level-pin');
+  var lineUpload = window.modal.formUpload.querySelector('.upload-effect-level-line');
   var photoEffectUpload = window.modal.formUpload.querySelector('.upload-effect-controls');
   var photoEffectPreviewUpload = window.modal.formUpload.querySelector('.effect-image-preview');
+
+  var getCalculateSaturation = function (saturation) {
+    return (saturation * (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2));
+  };
 
   var FilteredStyle = {
     'effect-none': function () {
@@ -14,40 +22,40 @@
     'effect-chrome': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'grayscale(' + (parseInt(getComputedStyle(window.slider.pinUpload).left, 10)) / parseInt(getComputedStyle(window.slider.lineUpload).width, 10).toFixed(2) + ')';
+      photoEffectPreviewUpload.style.filter = 'grayscale(' + getCalculateSaturation(1) + ')';
     },
 
     'effect-sepia': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'sepia(' + (parseInt(getComputedStyle(window.slider.pinUpload).left, 10)) / parseInt(getComputedStyle(window.slider.lineUpload).width, 10).toFixed(2) + ')';
+      photoEffectPreviewUpload.style.filter = 'sepia(' + getCalculateSaturation(1) + ')';
     },
 
     'effect-marvin': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'invert(' + 100 * (parseInt(getComputedStyle(window.slider.pinUpload).left, 10)) / parseInt(getComputedStyle(window.slider.lineUpload).width, 10).toFixed(2) + '%)';
+      photoEffectPreviewUpload.style.filter = 'invert(' + getCalculateSaturation(100) + '%)';
     },
 
     'effect-phobos': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'blur(' + 3 * (parseInt(getComputedStyle(window.slider.pinUpload).left, 10)) / parseInt(getComputedStyle(window.slider.lineUpload).width, 10).toFixed(2) + 'px)';
+      photoEffectPreviewUpload.style.filter = 'blur(' + getCalculateSaturation(3) + 'px)';
     },
 
     'effect-heat': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'brightness(' + 3 * (parseInt(getComputedStyle(window.slider.pinUpload).left, 10)) / parseInt(getComputedStyle(window.slider.lineUpload).width, 10).toFixed(2) + ')';
+      photoEffectPreviewUpload.style.filter = 'brightness(' + getCalculateSaturation(3) + ')';
     }
   };
 
   var onShowSliderClick = function () {
-    window.slider.sliderUpload.style.display = 'block';
+    sliderUpload.style.display = 'block';
   };
 
   var onHiddenSliderClick = function () {
-    window.slider.sliderUpload.style.display = 'none';
+    sliderUpload.style.display = 'none';
   };
 
   onHiddenSliderClick();
@@ -59,15 +67,25 @@
     FilteredStyle[(evt.target.id).slice(7)]();
   };
 
+  var applyFilter = function () {
+    [].forEach.call(Object.keys(window.applyFilter.FilteredStyle), function (it) {
+      if (window.applyFilter.photoEffectPreviewUpload.classList.contains(it)) {
+        window.applyFilter.FilteredStyle[it]();
+      }
+    });
+  };
+
+  window.slider.addSlider(pinUpload, lineUpload, valueUpload, applyFilter);
+
   photoEffectUpload.addEventListener('change', function (evt) {
-    window.slider.pinUpload.style.left = '100%';
-    window.slider.valueUpload.style.width = '100%';
+    pinUpload.style.left = '100%';
+    valueUpload.style.width = '100%';
 
     onCheckboxEffectChange(evt);
   });
 
-  window.slider.pinUpload.addEventListener('mouseup', function () {
-    window.slider.valueUpload.style.width = (parseInt(getComputedStyle(window.slider.pinUpload).left, 10) * 100 / parseInt(getComputedStyle(window.slider.lineUpload).width, 10)).toFixed(0) + '%';
+  pinUpload.addEventListener('mouseup', function () {
+    valueUpload.style.width = (parseInt(getComputedStyle(pinUpload).left, 10) * 100 / parseInt(getComputedStyle(lineUpload).width, 10)).toFixed(0) + '%';
 
     [].forEach.call(Object.keys(FilteredStyle), function (it) {
       if (photoEffectPreviewUpload.classList.contains(it)) {

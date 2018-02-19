@@ -10,7 +10,7 @@
   var onOpenFullSizePhotoClick = function (photo) {
     indexPhoto.src = photo.url;
     indexLikePhoto.textContent = photo.likes;
-    indexPhotoComment.textContent = photo.comments;
+    indexPhotoComment.textContent = photo.comments.length;
     indexPhotoContainer.classList.remove('hidden');
 
     indexPhotoClose.addEventListener('click', onCloseFullSizePhotoClick);
