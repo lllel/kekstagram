@@ -68,14 +68,12 @@
   };
 
   var applyFilter = function () {
-    [].forEach.call(Object.keys(window.applyFilter.FilteredStyle), function (it) {
-      if (window.applyFilter.photoEffectPreviewUpload.classList.contains(it)) {
-        window.applyFilter.FilteredStyle[it]();
+    [].forEach.call(Object.keys(FilteredStyle), function (it) {
+      if (photoEffectPreviewUpload.classList.contains(it)) {
+        FilteredStyle[it]();
       }
     });
   };
-
-  window.slider.addSlider(pinUpload, lineUpload, valueUpload, applyFilter);
 
   photoEffectUpload.addEventListener('change', function (evt) {
     pinUpload.style.left = '100%';
@@ -83,6 +81,8 @@
 
     onCheckboxEffectChange(evt);
   });
+
+  window.slider.addSlider(pinUpload, lineUpload, valueUpload, applyFilter);
 
   window.applyFilter = {
     photoEffectPreviewUpload: photoEffectPreviewUpload,

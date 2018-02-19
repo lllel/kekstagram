@@ -73,6 +73,7 @@
 
     node.classList.add('error-text');
     node.textContent = 'Произошла ошибка отправки данных: ' + errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
   };
 
   hashTagInput.addEventListener('input', function () {
