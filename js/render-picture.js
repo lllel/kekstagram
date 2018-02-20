@@ -25,17 +25,7 @@
   };
 
   var onSuccessGetPictures = function (data) {
-    try {
-      var pictures = JSON.parse(data.slice(0));
-
-    } catch (err) {
-      if (err instanceof window.util.typeError[err.name]) {
-        window.util.typeError[err.name](err);
-
-      } else {
-        window.util.typeError['default'](err);
-      }
-    }
+    var pictures = JSON.parse(data.slice(0));
 
     var elemsFragment = window.util.createElemsFragment(pictures, getRenderPhoto);
 
@@ -50,5 +40,15 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  window.backend.load(onSuccessGetPictures, onErrorGetPictures);
+  try {
+    window.backend.load(onSuccessGetPictures, onErrorGetPictures);
+
+  } catch (err) {
+    if (err instanceof window.util.typeError[err.name]) {
+      window.util.typeError[err.name](err);
+
+    } else {
+      window.util.typeError['default'](err);
+    }
+  }
 })();
