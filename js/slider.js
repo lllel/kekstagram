@@ -1,62 +1,52 @@
 'use strict';
 
 (function () {
-  var sliderUpload = window.modal.formUpload.querySelector('.upload-effect-level');
-  var valueUpload = window.modal.formUpload.querySelector('.upload-effect-level-val');
-  var pinUpload = window.modal.formUpload.querySelector('.upload-effect-level-pin');
-  var lineUpload = window.modal.formUpload.querySelector('.upload-effect-level-line');
+  var addSlider = function (pin, emptyLine, fillLine, cb) {
+    pin.addEventListener('mousedown', function (evt) {
+      evt.preventDefault();
 
-  pinUpload.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
-
-    var startCoords = {
-      x: evt.clientX
-    };
-
-    var onMouseMoveClick = function (evtMove) {
-      evtMove.preventDefault();
-
-      var shift = {
-        x: startCoords.x - evtMove.clientX
+      var startCoords = {
+        x: evt.clientX
       };
 
-      startCoords = {
-        x: evtMove.clientX
-      };
+      var onMouseMoveClick = function (evtMove) {
+        evtMove.preventDefault();
 
-      if (pinUpload.offsetLeft < 0) {
-        pinUpload.style.left = '0px';
-      }
+        var shift = {
+          x: startCoords.x - evtMove.clientX
+        };
 
-      if (pinUpload.offsetLeft > parseInt(getComputedStyle(lineUpload).width, 10)) {
-        pinUpload.style.left = parseInt(getComputedStyle(lineUpload).width, 10) + 'px';
-      }
+        startCoords = {
+          x: evtMove.clientX
+        };
 
-      pinUpload.style.left = pinUpload.offsetLeft - shift.x + 'px';
-      valueUpload.style.width = (parseInt(getComputedStyle(pinUpload).left, 10) * 100 / parseInt(getComputedStyle(lineUpload).width, 10)).toFixed(0) + '%';
-
-      [].forEach.call(Object.keys(window.applyFilter.FilteredStyle), function (it) {
-        if (window.applyFilter.photoEffectPreviewUpload.classList.contains(it)) {
-          window.applyFilter.FilteredStyle[it]();
+        if (pin.offsetLeft < 0) {
+          pin.style.left = '0px';
         }
-      });
-    };
 
-    var onMouseUp = function (evtUp) {
-      evtUp.preventDefault();
+        if (pin.offsetLeft > parseInt(getComputedStyle(emptyLine).width, 10)) {
+          pin.style.left = parseInt(getComputedStyle(emptyLine).width, 10) + 'px';
+        }
 
-      document.removeEventListener('mousemove', onMouseMoveClick);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
+        pin.style.left = pin.offsetLeft - shift.x + 'px';
+        fillLine.style.width = (parseInt(getComputedStyle(pin).left, 10) * 100 / parseInt(getComputedStyle(emptyLine).width, 10)).toFixed(0) + '%';
 
-    document.addEventListener('mousemove', onMouseMoveClick);
-    document.addEventListener('mouseup', onMouseUp);
-  });
+        cb();
+      };
+
+      var onMouseUp = function (evtUp) {
+        evtUp.preventDefault();
+
+        document.removeEventListener('mousemove', onMouseMoveClick);
+        document.removeEventListener('mouseup', onMouseUp);
+      };
+
+      document.addEventListener('mousemove', onMouseMoveClick);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+  };
 
   window.slider = {
-    sliderUpload: sliderUpload,
-    valueUpload: valueUpload,
-    pinUpload: pinUpload,
-    lineUpload: lineUpload
+    addSlider: addSlider
   };
 })();

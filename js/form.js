@@ -3,6 +3,7 @@
 (function () {
   var hashTagInput = document.querySelector('.upload-form-hashtags');
   var commentTextarea = window.modal.formUpload.querySelector('.upload-form-description');
+  var submitForm = document.querySelector('.upload-form-submit');
 
   var HashtagError = {
     maxLength: 'Максимальная длина одного хэштега не более 20-ти символов',
@@ -63,9 +64,27 @@
     });
   };
 
+  var onSuccessSendPictureSetting = function () {
+    window.modal.formImages.classList.add('hidden');
+  };
+
+  var onErrorSendPictureSetting = function (errorMessage) {
+    var node = document.createElement('div');
+
+    node.classList.add('error-text');
+    node.textContent = 'Произошла ошибка отправки данных: ' + errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
   hashTagInput.addEventListener('input', function () {
     onBtnCheckValidityHashtagClick();
   });
 
   commentTextarea.addEventListener('keydown', onPreventDefaultCommentEscPress);
+
+  submitForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+
+    window.backend.save(new FormData(window.modal.formUpload), onSuccessSendPictureSetting, onErrorSendPictureSetting);
+  });
 })();

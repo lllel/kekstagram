@@ -60,6 +60,7 @@
   document.removeEventListener('keydown', onButtonCloseFormEscPress);
 
   window.modal = {
-    formUpload: formUpload
+    formUpload: formUpload,
+    formImages: formImages
   };
 })();
