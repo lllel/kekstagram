@@ -7,28 +7,28 @@
   };
 
   var typeError = {
-    'URIError': function (e) {
-      throw new ReadError('Ошибка в URI', e);
+    'URIError': function (err) {
+      throw new ReadError('Ошибка в URI', err);
     },
 
-    'RangeError': function (e) {
-      throw new ReadError('Переданный параметр недосягаем', e);
+    'RangeError': function (err) {
+      throw new ReadError('Переданный параметр недосягаем', err);
     },
 
-    'ReferenceError': function (e) {
-      throw new ReadError('Ошибка разименовании неверной ссылки', e);
+    'ReferenceError': function (err) {
+      throw new ReadError('Ошибка разименовании неверной ссылки', err);
     },
 
-    'SyntaxError': function (e) {
-      throw new ReadError('Синтаксическая ошибка', e);
+    'SyntaxError': function (err) {
+      throw new ReadError('Синтаксическая ошибка', err);
     },
 
-    'TypeError': function (e) {
-      throw new ReadError('Переменная или параметр неправильного типа', e);
+    'TypeError': function (err) {
+      throw new ReadError('Переменная или параметр неправильного типа', err);
     },
 
-    'default': function (e) {
-      throw e;
+    'default': function (err) {
+      throw err;
     }
   };
 

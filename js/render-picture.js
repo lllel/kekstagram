@@ -43,12 +43,12 @@
   try {
     window.backend.load(onSuccessGetPictures, onErrorGetPictures);
 
-  } catch (error) {
-    if (error.name) {
-      window.util.typeError[error.name](error);
+  } catch (err) {
+    if (err instanceof window.util.typeError[err.name]) {
+      window.util.typeError[err.name](err);
 
     } else {
-      window.util.typeError['default'](error);
+      window.util.typeError['default'](err);
     }
   }
 })();
