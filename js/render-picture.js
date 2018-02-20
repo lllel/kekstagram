@@ -25,7 +25,17 @@
   };
 
   var onSuccessGetPictures = function (data) {
-    var pictures = JSON.parse(data.slice(0));
+    try {
+      var pictures = JSON.parse(data.slice(0));
+
+    } catch (err) {
+      if (err instanceof window.util.typeError[err.name]) {
+        window.util.typeError[err.name](err);
+
+      } else {
+        window.util.typeError['default'](err);
+      }
+    }
 
     var elemsFragment = window.util.createElemsFragment(pictures, getRenderPhoto);
 
@@ -40,15 +50,5 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  try {
-    window.backend.load(onSuccessGetPictures, onErrorGetPictures);
-
-  } catch (err) {
-    if (err instanceof window.util.typeError[err.name]) {
-      window.util.typeError[err.name](err);
-
-    } else {
-      window.util.typeError['default'](err);
-    }
-  }
+  window.backend.load(onSuccessGetPictures, onErrorGetPictures);
 })();
