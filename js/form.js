@@ -77,7 +77,7 @@
   };
 
   hashTagInput.addEventListener('input', function () {
-    onBtnCheckValidityHashtagClick();
+    window.util.tripple(onBtnCheckValidityHashtagClick);
   });
 
   commentTextarea.addEventListener('keydown', onPreventDefaultCommentEscPress);

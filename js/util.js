@@ -1,6 +1,14 @@
 'use strict';
 
 (function () {
+  var timerId = null;
+  var timerForTripple = null;
+
+  var TimerDelay = {
+    DEBOUNCE: 500,
+    TRIPPLE: 5000
+  };
+
   var ButtonKeyCode = {
     ESC: 27,
     ENTER: 13
@@ -61,6 +69,31 @@
     });
   };
 
+  var debounce = function (func) {
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+
+    timerId = setTimeout(func, TimerDelay.DEBOUNCE);
+  };
+
+  var tripple = function (func) {
+    if (timerForTripple) {
+      timerForTripple = true;
+
+    } else {
+      func();
+
+      timerForTripple = setTimeout(function () {
+        func();
+
+        timerForTripple = null;
+      }, TimerDelay.TRIPPLE);
+    }
+
+
+  };
+
   var isEscPressEvent = function (evt, cb) {
     if (evt.keyCode === ButtonKeyCode.ESC) {
 
@@ -82,6 +115,8 @@
     isEscPressEvent: isEscPressEvent,
     isEnterPressEvent: isEnterPressEvent,
     ReadError: ReadError,
+    debounce: debounce,
+    tripple: tripple,
     typeError: typeError
   };
 })();

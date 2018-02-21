@@ -22,26 +22,26 @@
     return Math.random() - 0.5;
   };
 
-  var filteredPictures = function (evt) {
+  var filteredPictures = function () {
     var filteredPics = window.pictures.slice(0);
 
     var getSortByPropertyByLikes = function (el, property) {
-      if (evt.target === el) {
+      if (el.checked) {
         filteredPics.sort(isFilteredSortByLikes(property));
       }
     };
 
     var getSortByPropertyByComments = function (el, property) {
-      if (evt.target === el) {
+      if (el.checked) {
         filteredPics.sort(isFilteredSortByComments(property));
       }
     };
 
-    if (evt.target === pictureRecommend) {
+    if (pictureRecommend.checked) {
       filteredPics = window.pictures.slice(0);
     }
 
-    if (evt.target === pictureRandom) {
+    if (pictureRandom.checked) {
       filteredPics.sort(isRandomPictureSort);
     }
 
@@ -51,8 +51,8 @@
     window.renderPicture.addPhotoInPage(filteredPics);
   };
 
-  window.renderPicture.filtersForm.addEventListener('change', function (evt) {
-    filteredPictures(evt);
+  window.renderPicture.filtersForm.addEventListener('change', function () {
+    window.util.debounce(filteredPictures);
   });
 
   window.filtered = {
