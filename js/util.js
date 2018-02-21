@@ -2,11 +2,11 @@
 
 (function () {
   var timerId = null;
-  var timerForTripple = null;
+  var timerForThrottle = null;
 
   var TimerDelay = {
     DEBOUNCE: 500,
-    TRIPPLE: 5000
+    THROTTLE: 5000
   };
 
   var ButtonKeyCode = {
@@ -77,18 +77,18 @@
     timerId = setTimeout(func, TimerDelay.DEBOUNCE);
   };
 
-  var tripple = function (func) {
-    if (timerForTripple) {
-      timerForTripple = true;
+  var throttle = function (func) {
+    if (timerForThrottle) {
+      timerForThrottle = true;
 
     } else {
       func();
 
-      timerForTripple = setTimeout(function () {
+      timerForThrottle = setTimeout(function () {
         func();
 
-        timerForTripple = null;
-      }, TimerDelay.TRIPPLE);
+        timerForThrottle = null;
+      }, TimerDelay.THROTTLE);
     }
 
 
@@ -116,7 +116,7 @@
     isEnterPressEvent: isEnterPressEvent,
     ReadError: ReadError,
     debounce: debounce,
-    tripple: tripple,
+    throttle: throttle,
     typeError: typeError
   };
 })();
