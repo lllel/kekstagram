@@ -1,6 +1,10 @@
 'use strict';
 
 (function () {
+  var TIMER_DEBOUNCE = 500;
+
+  var timerId = null;
+
   var ButtonKeyCode = {
     ESC: 27,
     ENTER: 13
@@ -61,6 +65,14 @@
     });
   };
 
+  var debounce = function (func) {
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+
+    timerId = setTimeout(func, TIMER_DEBOUNCE);
+  };
+
   var isEscPressEvent = function (evt, cb) {
     if (evt.keyCode === ButtonKeyCode.ESC) {
 
@@ -82,6 +94,7 @@
     isEscPressEvent: isEscPressEvent,
     isEnterPressEvent: isEnterPressEvent,
     ReadError: ReadError,
+    debounce: debounce,
     typeError: typeError
   };
 })();
