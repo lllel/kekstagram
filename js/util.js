@@ -1,11 +1,9 @@
 'use strict';
 
 (function () {
-  var timerId = null;
+  var TIMER_DEBOUNCE = 500;
 
-  var TimerDelay = {
-    DEBOUNCE: 500
-  };
+  var timerId = null;
 
   var ButtonKeyCode = {
     ESC: 27,
@@ -72,7 +70,7 @@
       clearTimeout(timerId);
     }
 
-    timerId = setTimeout(func, TimerDelay.DEBOUNCE);
+    timerId = setTimeout(func, TIMER_DEBOUNCE);
   };
 
   var isEscPressEvent = function (evt, cb) {
