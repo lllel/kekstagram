@@ -77,23 +77,6 @@
     timerId = setTimeout(func, TimerDelay.DEBOUNCE);
   };
 
-  var throttle = function (func) {
-    if (timerForThrottle) {
-      timerForThrottle = true;
-
-    } else {
-      func();
-
-      timerForThrottle = setTimeout(function () {
-        func();
-
-        timerForThrottle = null;
-      }, TimerDelay.THROTTLE);
-    }
-
-
-  };
-
   var isEscPressEvent = function (evt, cb) {
     if (evt.keyCode === ButtonKeyCode.ESC) {
 
@@ -116,7 +99,6 @@
     isEnterPressEvent: isEnterPressEvent,
     ReadError: ReadError,
     debounce: debounce,
-    throttle: throttle,
     typeError: typeError
   };
 })();
