@@ -2,11 +2,9 @@
 
 (function () {
   var timerId = null;
-  var timerForThrottle = null;
 
   var TimerDelay = {
-    DEBOUNCE: 500,
-    THROTTLE: 5000
+    DEBOUNCE: 500
   };
 
   var ButtonKeyCode = {
