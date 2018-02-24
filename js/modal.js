@@ -61,6 +61,7 @@
 
   window.modal = {
     formUpload: formUpload,
-    formImages: formImages
+    formImages: formImages,
+    uploadInput: uploadInput
   };
 })();
