@@ -2,6 +2,8 @@
 
 (function () {
   var SERVER_URL = 'https://js.dump.academy/kekstagram';
+  var DELAY_TIME = 10000;
+  var STATUS_OK = 200;
 
   var ErrorCode = {
     '400': 'Неверный запрос',
@@ -16,10 +18,10 @@
     var xhr = new XMLHttpRequest();
 
     xhr.type = 'json';
-    xhr.timeout = 10000;
+    xhr.timeout = DELAY_TIME;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === STATUS_OK) {
         onLoad(xhr.response);
 
       } else {

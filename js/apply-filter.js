@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var PREFIX_LENGTH = 7;
+
   var sliderUpload = window.modal.formUpload.querySelector('.upload-effect-level');
   var valueUpload = window.modal.formUpload.querySelector('.upload-effect-level-val');
   var pinUpload = window.modal.formUpload.querySelector('.upload-effect-level-pin');
@@ -12,7 +14,7 @@
     return (saturation * (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2));
   };
 
-  var FilteredStyle = {
+  var filteredStyle = {
     'effect-none': function () {
       onHiddenSliderClick();
 
@@ -61,16 +63,16 @@
   onHiddenSliderClick();
 
   var onCheckboxEffectChange = function (evt) {
-    window.util.getRemoveClass(FilteredStyle, photoEffectPreviewUpload);
+    window.util.getRemoveClass(filteredStyle, photoEffectPreviewUpload);
 
-    photoEffectPreviewUpload.classList.add((evt.target.id).slice(7));
-    FilteredStyle[(evt.target.id).slice(7)]();
+    photoEffectPreviewUpload.classList.add((evt.target.id).slice(PREFIX_LENGTH));
+    filteredStyle[(evt.target.id).slice(PREFIX_LENGTH)]();
   };
 
   var applyFilter = function () {
-    [].forEach.call(Object.keys(FilteredStyle), function (it) {
+    [].forEach.call(Object.keys(filteredStyle), function (it) {
       if (photoEffectPreviewUpload.classList.contains(it)) {
-        FilteredStyle[it]();
+        filteredStyle[it]();
       }
     });
   };
@@ -86,6 +88,6 @@
 
   window.applyFilter = {
     photoEffectPreviewUpload: photoEffectPreviewUpload,
-    FilteredStyle: FilteredStyle
+    filteredStyle: filteredStyle
   };
 })();

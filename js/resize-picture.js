@@ -4,26 +4,26 @@
   var uploadResizeValue = window.modal.formUpload.querySelector('.upload-resize-controls-value');
   var uploadResizeContainer = window.modal.formUpload.querySelector('.upload-resize-controls');
 
-  var PERCENT = {
+  var Percent = {
     step: 25,
     max: 100
   };
 
   var incPercent = function (percent) {
-    percent += PERCENT.step;
+    percent += Percent.step;
 
-    if (percent > PERCENT.max) {
-      percent = PERCENT.max;
+    if (percent > Percent.max) {
+      percent = Percent.max;
     }
 
     return percent;
   };
 
   var decPercent = function (percent) {
-    percent -= PERCENT.step;
+    percent -= Percent.step;
 
-    if (percent < PERCENT.step) {
-      percent = PERCENT.step;
+    if (percent < Percent.step) {
+      percent = Percent.step;
     }
 
     return percent;

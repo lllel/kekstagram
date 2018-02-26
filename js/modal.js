@@ -13,15 +13,13 @@
 
     window.applyFilter.photoEffectPreviewUpload.style.filter = '';
     window.applyFilter.photoEffectPreviewUpload.style.transform = 'scale(1)';
-
-    window.applyFilter.FilteredStyle['effect-none']();
-
-    window.util.getRemoveClass(window.applyFilter.FilteredStyle, window.applyFilter.photoEffectPreviewUpload);
+    window.applyFilter.filteredStyle['effect-none']();
+    window.util.getRemoveClass(window.applyFilter.filteredStyle, window.applyFilter.photoEffectPreviewUpload);
   };
 
   var onButtonInputEnterPress = function (evt) {
     window.util.isEnterPressEvent(evt, function () {
-      onButtonInputChange();
+      uploadInput.click();
     });
 
     document.addEventListener('keydown', onButtonCloseFormEscPress);

@@ -1,11 +1,11 @@
 'use strict';
 
 (function () {
-  var hashTagInput = document.querySelector('.upload-form-hashtags');
+  var hashTagInput = window.modal.formUpload.querySelector('.upload-form-hashtags');
   var commentTextarea = window.modal.formUpload.querySelector('.upload-form-description');
-  var submitForm = document.querySelector('.upload-form-submit');
+  var submitForm = window.modal.formUpload.querySelector('.upload-form-submit');
 
-  var HashtagError = {
+  var hashtagError = {
     maxLength: 'Максимальная длина одного хэштега не более 20-ти символов',
     count: 'Нельзя использовать больше 5ти хэштегов',
     copy: 'Хэштеги повторяются',
@@ -23,20 +23,20 @@
     var parts = value.split(' ');
 
     if (parts.length > HashtagValidity.MAX_COUNT) {
-      hashTagInput.setCustomValidity(HashtagError.count);
+      hashTagInput.setCustomValidity(hashtagError.count);
 
       return false;
     }
 
     for (var i = 0; i < parts.length; i++) {
       if (parts[i].length > HashtagValidity.MAX_LENGTH) {
-        hashTagInput.setCustomValidity(HashtagError.maxLength);
+        hashTagInput.setCustomValidity(hashtagError.maxLength);
 
         return false;
       }
 
       if (value !== '' && parts[i].charAt(0) !== '#') {
-        hashTagInput.setCustomValidity(HashtagError.type);
+        hashTagInput.setCustomValidity(hashtagError.type);
 
         return false;
       }
@@ -46,7 +46,7 @@
       });
 
       if (repeated.length > 1) {
-        hashTagInput.setCustomValidity(HashtagError.copy);
+        hashTagInput.setCustomValidity(hashtagError.copy);
 
         return false;
       }
