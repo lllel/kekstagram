@@ -1,11 +1,11 @@
 'use strict';
 
 (function () {
-  var indexPhoto = document.querySelector('.gallery-overlay-image');
-  var indexLikePhoto = document.querySelector('.likes-count');
-  var indexPhotoComment = document.querySelector('.comments-count');
   var indexPhotoContainer = document.querySelector('.gallery-overlay');
-  var indexPhotoClose = document.querySelector('.gallery-overlay-close');
+  var indexPhoto = indexPhotoContainer.querySelector('.gallery-overlay-image');
+  var indexLikePhoto = indexPhotoContainer.querySelector('.likes-count');
+  var indexPhotoComment = indexPhotoContainer.querySelector('.comments-count');
+  var indexPhotoClose = indexPhotoContainer.querySelector('.gallery-overlay-close');
 
   var onOpenFullSizePhotoClick = function (photo) {
     indexPhoto.src = photo.url;

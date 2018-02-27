@@ -1,11 +1,6 @@
 'use strict';
 
 (function () {
-  var pictureRecommend = window.renderPicture.filtersForm.querySelector('#filter-recommend');
-  var picturePopular = window.renderPicture.filtersForm.querySelector('#filter-popular');
-  var pictureDiscussed = window.renderPicture.filtersForm.querySelector('#filter-discussed');
-  var pictureRandom = window.renderPicture.filtersForm.querySelector('#filter-random');
-
   var isFilteredSortByLikes = function (property) {
     return function (pictureLeft, pictureRight) {
       return pictureRight[property] - pictureLeft[property];
@@ -23,30 +18,30 @@
   };
 
   var filteredPictures = function () {
+    var checkedFilter = window.renderPicture.filtersForm.querySelector('input[type=radio]:checked');
     var filteredPics = window.pictures.slice(0);
 
-    var getSortByPropertyByLikes = function (el, property) {
-      if (el.checked) {
-        filteredPics.sort(isFilteredSortByLikes(property));
-      }
+    var getSortByPropertyByLikes = function (property) {
+      filteredPics.sort(isFilteredSortByLikes(property));
     };
 
-    var getSortByPropertyByComments = function (el, property) {
-      if (el.checked) {
-        filteredPics.sort(isFilteredSortByComments(property));
-      }
+    var getSortByPropertyByComments = function (property) {
+      filteredPics.sort(isFilteredSortByComments(property));
     };
 
-    if (pictureRecommend.checked) {
-      filteredPics = window.pictures.slice(0);
-    }
+    switch (checkedFilter.id) {
+      case 'filter-popular':
+        getSortByPropertyByLikes('likes');
+        break;
 
-    if (pictureRandom.checked) {
-      filteredPics.sort(isRandomPictureSort);
-    }
+      case 'filter-discussed':
+        getSortByPropertyByComments('comments');
+        break;
 
-    getSortByPropertyByLikes(picturePopular, 'likes');
-    getSortByPropertyByComments(pictureDiscussed, 'comments');
+      case 'filter-random':
+        filteredPics.sort(isRandomPictureSort);
+        break;
+    }
 
     window.renderPicture.addPhotoInPage(filteredPics);
   };
