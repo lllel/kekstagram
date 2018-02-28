@@ -10,11 +10,6 @@
   var onButtonInputChange = function () {
     formImages.classList.remove('hidden');
     document.addEventListener('keydown', onButtonCloseFormEscPress);
-
-    window.applyFilter.photoEffectPreviewUpload.style.filter = '';
-    window.applyFilter.photoEffectPreviewUpload.style.transform = 'scale(1)';
-    window.applyFilter.filteredStyle['effect-none']();
-    window.util.getRemoveClass(window.applyFilter.filteredStyle, window.applyFilter.photoEffectPreviewUpload);
   };
 
   var onButtonInputEnterPress = function (evt) {
