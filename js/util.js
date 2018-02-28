@@ -74,7 +74,7 @@
     document.body.insertAdjacentElement('afterbegin', node);
 
     setTimeout(function () {
-      node.classList.remove('error-text');
+      node.style.display = 'none';
     }, ERROR_MESSAGE_DELAY_TIME);
   };
 
