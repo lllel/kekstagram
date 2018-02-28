@@ -3,20 +3,17 @@
 (function () {
   var hashtagInput = window.modal.formUpload.querySelector('.upload-form-hashtags');
   var commentTextarea = window.modal.formUpload.querySelector('.upload-form-description');
-  var submitForm = window.modal.formUpload.querySelector('.upload-form-submit');
 
   var ValidityCount = {
     MAX_HASHTAG_COUNT: 5,
-    MAX_HASHTAG_LENGTH: 20,
-    MAX_COMMENT_LENGTH: 5
+    MAX_HASHTAG_LENGTH: 20
   };
 
   var validityError = {
-    hashtagMaxLength: 'Максимальная длина одного хэштега не более ' + ValidityCount.MAX_COMMENT_LENGTH + ' символов',
+    hashtagMaxLength: 'Максимальная длина одного хэштега не более ' + ValidityCount.MAX_HASHTAG_LENGTH + ' символов',
     hashtagCount: 'Нельзя использовать больше ' + ValidityCount.MAX_HASHTAG_COUNT + ' хэштегов',
     hashtagCopy: 'Хэштеги повторяются',
-    hashtagType: 'Хэштег начинается с символа #',
-    commentMaxLength: 'Максимальная длина комментария не более ' + ValidityCount.MAX_COMMENT_LENGTH + ' символов'
+    hashtagType: 'Хэштег начинается с символа #'
   };
 
   var onBtnCheckValidityHashtagClick = function () {
@@ -65,14 +62,9 @@
     });
   };
 
-  var addMaxLengthComment = function () {
-    if (commentTextarea.value.length > ValidityCount.MAX_COMMENT_LENGTH) {
-      commentTextarea.setCustomValidity(validityError.commentMaxLength);
-    }
-  };
-
   var onSuccessSendPictureSetting = function () {
-    window.modal.formImages.classList.add('hidden');
+    window.modal.onButtonCloseFormClick();
+
     window.applyFilter.photoEffectPreviewUpload.style.filter = '';
     window.applyFilter.photoEffectPreviewUpload.style.transform = 'scale(1)';
     window.applyFilter.filteredStyle['effect-none']();
@@ -89,11 +81,9 @@
 
   commentTextarea.addEventListener('keydown', onPreventDefaultCommentEscPress);
 
-  submitForm.addEventListener('submit', function (evt) {
-    evt.preventDefault();
-
-    addMaxLengthComment();
-
+  window.modal.formUpload.addEventListener('submit', function (evt) {
     window.backend.save(new FormData(window.modal.formUpload), onSuccessSendPictureSetting, onErrorSendPictureSetting);
+
+    evt.preventDefault();
   });
 })();

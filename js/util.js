@@ -2,7 +2,7 @@
 
 (function () {
   var TIMER_DEBOUNCE = 500;
-  var ERROR_MESSAGE_DELAY_TIME = 2000;
+  var ERROR_MESSAGE_DELAY_TIME = 3000;
 
   var timerId = null;
 
