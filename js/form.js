@@ -64,11 +64,6 @@
 
   var onSuccessSendPictureSetting = function () {
     window.modal.onButtonCloseFormClick();
-
-    window.applyFilter.photoEffectPreviewUpload.style.filter = '';
-    window.applyFilter.photoEffectPreviewUpload.style.transform = 'scale(1)';
-    window.applyFilter.filteredStyle['effect-none']();
-    window.util.getRemoveClass(window.applyFilter.filteredStyle, window.applyFilter.photoEffectPreviewUpload);
   };
 
   var onErrorSendPictureSetting = function (errorMessage) {
@@ -86,4 +81,8 @@
 
     evt.preventDefault();
   });
+
+  window.form = {
+    hashtagInput: hashtagInput
+  };
 })();

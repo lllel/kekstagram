@@ -24,6 +24,11 @@
   var onButtonCloseFormClick = function () {
     formImages.classList.add('hidden');
     uploadInput.value = '';
+    window.applyFilter.photoEffectPreviewUpload.style.filter = '';
+    window.applyFilter.photoEffectPreviewUpload.style.transform = 'scale(1)';
+    window.applyFilter.filteredStyle['effect-none']();
+    window.form.hashtagInput.setCustomValidity('');
+    window.util.getRemoveClass(window.applyFilter.filteredStyle, window.applyFilter.photoEffectPreviewUpload);
 
     formUpload.reset();
 
