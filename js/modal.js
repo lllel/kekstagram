@@ -10,11 +10,6 @@
   var onButtonInputChange = function () {
     formImages.classList.remove('hidden');
     document.addEventListener('keydown', onButtonCloseFormEscPress);
-
-    window.applyFilter.photoEffectPreviewUpload.style.filter = '';
-    window.applyFilter.photoEffectPreviewUpload.style.transform = 'scale(1)';
-    window.applyFilter.filteredStyle['effect-none']();
-    window.util.getRemoveClass(window.applyFilter.filteredStyle, window.applyFilter.photoEffectPreviewUpload);
   };
 
   var onButtonInputEnterPress = function (evt) {
@@ -27,21 +22,18 @@
   };
 
   var onButtonCloseFormClick = function () {
+    formImages.classList.add('hidden');
     uploadInput.value = '';
 
     formUpload.reset();
 
-    formImages.classList.add('hidden');
     document.removeEventListener('keydown', onButtonCloseFormEscPress);
     buttonUploadPhoto.addEventListener('keydown', onButtonInputEnterPress);
   };
 
   var onButtonCloseFormEscPress = function (evt) {
     window.util.isEscPressEvent(evt, function () {
-      formImages.classList.add('hidden');
-      uploadInput.value = '';
-
-      formUpload.reset();
+      buttonFormClose.click();
     });
 
     buttonUploadPhoto.addEventListener('keydown', onButtonInputEnterPress);
@@ -49,6 +41,7 @@
 
   uploadInput.addEventListener('change', function (evt) {
     evt.preventDefault();
+    formImages.classList.remove('hidden');
 
     onButtonInputChange();
   });
@@ -58,6 +51,7 @@
   document.removeEventListener('keydown', onButtonCloseFormEscPress);
 
   window.modal = {
+    onButtonCloseFormClick: onButtonCloseFormClick,
     formUpload: formUpload,
     formImages: formImages,
     uploadInput: uploadInput

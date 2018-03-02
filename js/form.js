@@ -1,42 +1,40 @@
 'use strict';
 
 (function () {
-  var hashTagInput = window.modal.formUpload.querySelector('.upload-form-hashtags');
+  var hashtagInput = window.modal.formUpload.querySelector('.upload-form-hashtags');
   var commentTextarea = window.modal.formUpload.querySelector('.upload-form-description');
-  var submitForm = window.modal.formUpload.querySelector('.upload-form-submit');
 
-  var hashtagError = {
-    maxLength: 'Максимальная длина одного хэштега не более 20-ти символов',
-    count: 'Нельзя использовать больше 5ти хэштегов',
-    copy: 'Хэштеги повторяются',
-    type: 'Хэштег начинается с символа #',
-    hyphen: 'Нельзя более одного дефиса подряд'
+  var ValidityCount = {
+    MAX_HASHTAG_COUNT: 5,
+    MAX_HASHTAG_LENGTH: 20
   };
 
-  var HashtagValidity = {
-    MAX_COUNT: 5,
-    MAX_LENGTH: 20
+  var validityError = {
+    hashtagMaxLength: 'Максимальная длина одного хэштега не более ' + ValidityCount.MAX_HASHTAG_LENGTH + ' символов',
+    hashtagCount: 'Нельзя использовать больше ' + ValidityCount.MAX_HASHTAG_COUNT + ' хэштегов',
+    hashtagCopy: 'Хэштеги повторяются',
+    hashtagType: 'Хэштег начинается с символа #'
   };
 
   var onBtnCheckValidityHashtagClick = function () {
-    var value = hashTagInput.value.toLowerCase().trim();
+    var value = hashtagInput.value.toLowerCase().trim();
     var parts = value.split(' ');
 
-    if (parts.length > HashtagValidity.MAX_COUNT) {
-      hashTagInput.setCustomValidity(hashtagError.count);
+    if (parts.length > ValidityCount.MAX_HASHTAG_COUNT) {
+      hashtagInput.setCustomValidity(validityError.hashtagCount);
 
       return false;
     }
 
     for (var i = 0; i < parts.length; i++) {
-      if (parts[i].length > HashtagValidity.MAX_LENGTH) {
-        hashTagInput.setCustomValidity(hashtagError.maxLength);
+      if (parts[i].length > ValidityCount.MAX_HASHTAG_LENGTH) {
+        hashtagInput.setCustomValidity(validityError.hashtagMaxLength);
 
         return false;
       }
 
       if (value !== '' && parts[i].charAt(0) !== '#') {
-        hashTagInput.setCustomValidity(hashtagError.type);
+        hashtagInput.setCustomValidity(validityError.hashtagType);
 
         return false;
       }
@@ -46,12 +44,12 @@
       });
 
       if (repeated.length > 1) {
-        hashTagInput.setCustomValidity(hashtagError.copy);
+        hashtagInput.setCustomValidity(validityError.hashtagCopy);
 
         return false;
       }
 
-      hashTagInput.setCustomValidity('');
+      hashtagInput.setCustomValidity('');
     }
 
     return true;
@@ -65,26 +63,27 @@
   };
 
   var onSuccessSendPictureSetting = function () {
-    window.modal.formImages.classList.add('hidden');
+    window.modal.onButtonCloseFormClick();
+
+    window.applyFilter.photoEffectPreviewUpload.style.filter = '';
+    window.applyFilter.photoEffectPreviewUpload.style.transform = 'scale(1)';
+    window.applyFilter.filteredStyle['effect-none']();
+    window.util.getRemoveClass(window.applyFilter.filteredStyle, window.applyFilter.photoEffectPreviewUpload);
   };
 
   var onErrorSendPictureSetting = function (errorMessage) {
-    var node = document.createElement('div');
-
-    node.classList.add('error-text');
-    node.textContent = 'Произошла ошибка отправки данных: ' + errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
+    window.util.addErrorMessage(errorMessage);
   };
 
-  hashTagInput.addEventListener('input', function () {
+  hashtagInput.addEventListener('input', function () {
     onBtnCheckValidityHashtagClick();
   });
 
   commentTextarea.addEventListener('keydown', onPreventDefaultCommentEscPress);
 
-  submitForm.addEventListener('submit', function (evt) {
-    evt.preventDefault();
-
+  window.modal.formUpload.addEventListener('submit', function (evt) {
     window.backend.save(new FormData(window.modal.formUpload), onSuccessSendPictureSetting, onErrorSendPictureSetting);
+
+    evt.preventDefault();
   });
 })();

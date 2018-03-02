@@ -34,7 +34,7 @@
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соеднинения');
+      onError('Произошла ошибка соединения');
     });
 
     xhr.open('GET', SERVER_URL + '/data');

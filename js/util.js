@@ -2,12 +2,15 @@
 
 (function () {
   var TIMER_DEBOUNCE = 500;
+  var ERROR_MESSAGE_DELAY_TIME = 3000;
 
   var timerId = null;
 
   var ButtonKeyCode = {
     ESC: 27,
-    ENTER: 13
+    ENTER: 13,
+    ARROW_LEFT: 37,
+    ARROW_RIGHT: 39
   };
 
   var typeError = {
@@ -65,6 +68,18 @@
     });
   };
 
+  var addErrorMessage = function (error) {
+    var node = document.createElement('div');
+
+    node.classList.add('error-text');
+    node.textContent = 'Произошла ошибка отправки данных: ' + error;
+    document.body.insertAdjacentElement('afterbegin', node);
+
+    setTimeout(function () {
+      node.style.display = 'none';
+    }, ERROR_MESSAGE_DELAY_TIME);
+  };
+
   var debounce = function (func) {
     if (timerId) {
       clearTimeout(timerId);
@@ -95,6 +110,8 @@
     isEnterPressEvent: isEnterPressEvent,
     ReadError: ReadError,
     debounce: debounce,
+    addErrorMessage: addErrorMessage,
+    ButtonKeyCode: ButtonKeyCode,
     typeError: typeError
   };
 })();

@@ -35,12 +35,8 @@
     addPhotoInPage(window.pictures);
   };
 
-  var onErrorGetPictures = function (error) {
-    var node = document.createElement('div');
-
-    node.classList.add('error-text');
-    node.textContent = 'Произошла ошибка отправки данных: ' + error;
-    document.body.insertAdjacentElement('afterbegin', node);
+  var onErrorGetPictures = function (errorMessage) {
+    window.util.addErrorMessage(errorMessage);
   };
 
   try {
