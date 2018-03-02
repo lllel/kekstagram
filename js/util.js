@@ -8,7 +8,9 @@
 
   var ButtonKeyCode = {
     ESC: 27,
-    ENTER: 13
+    ENTER: 13,
+    ARROW_LEFT: 37,
+    ARROW_RIGHT: 39
   };
 
   var typeError = {
@@ -109,6 +111,7 @@
     ReadError: ReadError,
     debounce: debounce,
     addErrorMessage: addErrorMessage,
+    ButtonKeyCode: ButtonKeyCode,
     typeError: typeError
   };
 })();

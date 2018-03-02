@@ -46,6 +46,17 @@
     window.renderPicture.addPhotoInPage(filteredPics);
   };
 
+  window.renderPicture.filtersForm.addEventListener('keydown', function (evt) {
+    window.util.isEnterPressEvent(evt, function () {
+      if (evt.target.previousElementSibling) {
+        evt.target.previousElementSibling.click();
+
+      } else {
+        evt.target.parentElement.lastElementChild.click();
+      }
+    });
+  });
+
   window.renderPicture.filtersForm.addEventListener('change', function () {
     window.util.debounce(filteredPictures);
   });

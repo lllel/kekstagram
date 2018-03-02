@@ -84,6 +84,17 @@
     onCheckboxEffectChange(evt);
   });
 
+  photoEffectUpload.addEventListener('keydown', function (evt) {
+    window.util.isEnterPressEvent(evt, function () {
+      if (evt.target.previousElementSibling) {
+        evt.target.previousElementSibling.click();
+
+      } else {
+        evt.target.parentElement.lastElementChild.click();
+      }
+    });
+  });
+
   window.slider.addSlider(pinUpload, lineUpload, valueUpload, applyFilter);
 
   window.applyFilter = {
