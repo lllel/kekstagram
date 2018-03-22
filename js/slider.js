@@ -14,19 +14,14 @@
       var onMouseMoveClick = function (evtMove) {
         evtMove.preventDefault();
 
-        var rightEdge = emptyLine.offsetWidth - (pin.offsetWidth / 2);
+        var maxWidthLine = emptyLine.offsetWidth - (pin.offsetWidth / 2);
 
         var shift = {
           x: evtMove.clientX - startCoords.x - emptyLine.getBoundingClientRect().left
         };
 
-        if (shift.x < pin.offsetWidth / 2) {
-          shift.x = pin.offsetWidth / 2;
-        }
-
-        if (shift.x > rightEdge) {
-          shift.x = rightEdge;
-        }
+        shift.x = Math.max(shift.x, pin.offsetWidth / 2);
+        shift.x = Math.min(shift.x, maxWidthLine);
 
         pin.style.left = shift.x + 'px';
         fillLine.style.width = pin.style.left;
