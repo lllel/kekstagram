@@ -8,30 +8,28 @@
       evt.preventDefault();
 
       var startCoords = {
-        x: evt.clientX
+        x: evt.clientX - pin.getBoundingClientRect().left - (pin.offsetWidth / 2)
       };
 
       var onMouseMoveClick = function (evtMove) {
         evtMove.preventDefault();
 
+        var rightEdge = emptyLine.offsetWidth - (pin.offsetWidth / 2);
+
         var shift = {
-          x: startCoords.x - evtMove.clientX
+          x: evtMove.clientX - startCoords.x - emptyLine.getBoundingClientRect().left
         };
 
-        startCoords = {
-          x: evtMove.clientX
-        };
-
-        if (pin.offsetLeft < 0) {
-          pin.style.left = '0px';
+        if (shift.x < pin.offsetWidth / 2) {
+          shift.x = pin.offsetWidth / 2;
         }
 
-        if (pin.offsetLeft > parseInt(getComputedStyle(emptyLine).width, 10)) {
-          pin.style.left = parseInt(getComputedStyle(emptyLine).width, 10) + 'px';
+        if (shift.x > rightEdge) {
+          shift.x = rightEdge;
         }
 
-        pin.style.left = pin.offsetLeft - shift.x + 'px';
-        fillLine.style.width = (parseInt(getComputedStyle(pin).left, 10)) + 'px';
+        pin.style.left = shift.x + 'px';
+        fillLine.style.width = pin.style.left;
 
         cb();
       };
@@ -47,27 +45,31 @@
       document.addEventListener('mouseup', onMouseUp);
     });
 
+    pin.addEventListener('dragstart', function () {
+      return false;
+    });
+
     pin.addEventListener('keydown', function (evt) {
       switch (evt.keyCode) {
         case window.util.ButtonKeyCode.ARROW_LEFT:
-          if (pin.offsetLeft < STEP) {
-            pin.style.left = '0px';
+          if (pin.offsetLeft < STEP || pin.offsetLeft < pin.offsetWidth) {
+            pin.style.left = (pin.offsetWidth / 2) + 'px';
 
           } else {
             pin.style.left = pin.offsetLeft - STEP + 'px';
-            fillLine.style.width = (parseInt(getComputedStyle(pin).left, 10)) + 'px';
+            fillLine.style.width = pin.style.left;
           }
 
           cb();
           break;
 
         case window.util.ButtonKeyCode.ARROW_RIGHT:
-          if (pin.offsetLeft > parseInt(getComputedStyle(emptyLine).width, 10) - STEP) {
-            pin.style.left = parseInt(getComputedStyle(emptyLine).width, 10) + 'px';
+          if (pin.offsetLeft > emptyLine.offsetWidth - STEP) {
+            pin.style.left = emptyLine.offsetWidth - (pin.offsetWidth / 2) + 'px';
 
           } else {
             pin.style.left = pin.offsetLeft + STEP + 'px';
-            fillLine.style.width = (parseInt(getComputedStyle(pin).left, 10)) + 'px';
+            fillLine.style.width = pin.offsetLeft + 'px';
           }
 
           cb();
