@@ -11,90 +11,80 @@
     this._emptyLine = this.elem.querySelector('.upload-effect-level-line');
     this.step = 10;
 
-    Slider.prototype.startDrag = function (evt) {
-      evt.preventDefault();
-
-      self.startCoords = {
-        x: evt.clientX - self._thumb.getBoundingClientRect().left - (self._thumb.offsetWidth / 2)
-      };
-    };
-
-    Slider.prototype.moveTo = function (evtMove) {
-      var maxWidthLine = self._emptyLine.offsetWidth - (self._thumb.offsetWidth / 2);
-
-      var shift = {
-        x: evtMove.clientX - self.startCoords.x - self._emptyLine.getBoundingClientRect().left
-      };
-
-      shift.x = Math.max(shift.x, self._thumb.offsetWidth / 2);
-      shift.x = Math.min(shift.x, maxWidthLine);
-
-      self._thumb.style.left = shift.x + 'px';
-      self._fillLine.style.width = self._thumb.style.left;
-
-      self.cb();
-    };
-
-    Slider.prototype.moveToForKey = function (evtKey) {
-      switch (evtKey.keyCode) {
-        case window.util.ButtonKeyCode.ARROW_LEFT:
-          if (self._thumb.offsetLeft < self.step || self._thumb.offsetLeft < self._thumb.offsetWidth) {
-            self._thumb.style.left = (self._thumb.offsetWidth / 2) + 'px';
-
-          } else {
-            self._thumb.style.left = self._thumb.offsetLeft - self.step + 'px';
-            self._fillLine.style.width = self._thumb.style.left;
-          }
-
-          cb();
-          break;
-
-        case window.util.ButtonKeyCode.ARROW_RIGHT:
-          if (self._thumb.offsetLeft > self._emptyLine.offsetWidth - self.step) {
-            self._thumb.style.left = self._emptyLine.offsetWidth - (self._thumb.offsetWidth / 2) + 'px';
-
-          } else {
-            self._thumb.style.left = self._thumb.offsetLeft + self.step + 'px';
-            self._fillLine.style.width = self._thumb.offsetLeft + 'px';
-          }
-
-          cb();
-          break;
-      }
-    };
-
-    Slider.prototype.dragEnd = function () {
-      document.removeEventListener('mousemove', self.onMouseMove);
-      document.removeEventListener('mouseup', self.onMouseUp);
-    };
-
-    Slider.prototype.onMouseDown = function (evtUp) {
-      self.startDrag(evtUp);
+    this.onMouseDown = function (evt) {
+      self.dragStart(evt);
 
       document.addEventListener('mousemove', self.onMouseMove);
       document.addEventListener('mouseup', self.onMouseUp);
     };
 
-    Slider.prototype.onMouseMove = function (evtMove) {
-      evtMove.preventDefault();
-
+    this.onMouseMove = function (evtMove) {
       self.moveTo(evtMove);
     };
 
-    Slider.prototype.onMoveToForKey = function (evtKey) {
+    this.onMoveToForKey = function (evtKey) {
       self.moveToForKey(evtKey);
     };
 
-    Slider.prototype.onMouseUp = function () {
-      self.dragEnd();
+    this.onMouseUp = function () {
+      document.removeEventListener('mousemove', self.onMouseMove);
+      document.removeEventListener('mouseup', self.onMouseUp);
     };
   };
 
-  Slider.prototype.init = function () {
-    var self = this;
+  Slider.prototype.dragStart = function (evt) {
+    this.startCoords = {
+      x: evt.clientX - this._thumb.getBoundingClientRect().left - (this._thumb.offsetWidth / 2)
+    };
+  };
 
-    this._thumb.addEventListener('mousedown', self.onMouseDown);
-    this._thumb.addEventListener('keydown', self.onMoveToForKey);
+  Slider.prototype.moveTo = function (evtMove) {
+    var maxWidthLine = this._emptyLine.offsetWidth - (this._thumb.offsetWidth / 2);
+
+    var shift = {
+      x: evtMove.clientX - this.startCoords.x - this._emptyLine.getBoundingClientRect().left
+    };
+
+    shift.x = Math.max(shift.x, this._thumb.offsetWidth / 2);
+    shift.x = Math.min(shift.x, maxWidthLine);
+
+    this._thumb.style.left = shift.x + 'px';
+    this._fillLine.style.width = this._thumb.style.left;
+
+    this.cb();
+  };
+
+  Slider.prototype.moveToForKey = function (evtKey) {
+    switch (evtKey.keyCode) {
+      case window.util.ButtonKeyCode.ARROW_LEFT:
+        if (this._thumb.offsetLeft < this.step || this._thumb.offsetLeft < this._thumb.offsetWidth) {
+          this._thumb.style.left = (this._thumb.offsetWidth / 2) + 'px';
+
+        } else {
+          this._thumb.style.left = this._thumb.offsetLeft - this.step + 'px';
+          this._fillLine.style.width = this._thumb.style.left;
+        }
+
+        this.cb();
+        break;
+
+      case window.util.ButtonKeyCode.ARROW_RIGHT:
+        if (this._thumb.offsetLeft > this._emptyLine.offsetWidth - this.step) {
+          this._thumb.style.left = this._emptyLine.offsetWidth - (this._thumb.offsetWidth / 2) + 'px';
+
+        } else {
+          this._thumb.style.left = this._thumb.offsetLeft + this.step + 'px';
+          this._fillLine.style.width = this._thumb.offsetLeft + 'px';
+        }
+
+        this.cb();
+        break;
+    }
+  };
+
+  Slider.prototype.init = function () {
+    this._thumb.addEventListener('mousedown', this.onMouseDown);
+    this._thumb.addEventListener('keydown', this.onMoveToForKey);
   };
 
   var slider = new Slider({elem: document.querySelector('.upload-effect-level')}, window.applyFilter.applyFilter);
