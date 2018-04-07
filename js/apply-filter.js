@@ -95,10 +95,9 @@
     });
   });
 
-  window.slider.addSlider(pinUpload, lineUpload, valueUpload, applyFilter);
-
   window.applyFilter = {
     photoEffectPreviewUpload: photoEffectPreviewUpload,
-    filteredStyle: filteredStyle
+    filteredStyle: filteredStyle,
+    applyFilter: applyFilter
   };
 })();
