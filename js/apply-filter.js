@@ -9,9 +9,10 @@
   var lineUpload = window.modal.formUpload.querySelector('.upload-effect-level-line');
   var photoEffectUpload = window.modal.formUpload.querySelector('.upload-effect-controls');
   var photoEffectPreviewUpload = window.modal.formUpload.querySelector('.effect-image-preview');
+  var pinLeft = null;
 
-  var getCalculateSaturation = function (saturation) {
-    return (saturation * (parseInt(getComputedStyle(pinUpload).left, 10)) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2));
+  var getCalculateSaturation = function (saturation, left) {
+    return (saturation * (left) / parseInt(getComputedStyle(lineUpload).width, 10).toFixed(2));
   };
 
   var filteredStyle = {
@@ -24,31 +25,31 @@
     'effect-chrome': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'grayscale(' + getCalculateSaturation(1) + ')';
+      photoEffectPreviewUpload.style.filter = 'grayscale(' + getCalculateSaturation(1, pinLeft) + ')';
     },
 
     'effect-sepia': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'sepia(' + getCalculateSaturation(1) + ')';
+      photoEffectPreviewUpload.style.filter = 'sepia(' + getCalculateSaturation(1, pinLeft) + ')';
     },
 
     'effect-marvin': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'invert(' + getCalculateSaturation(100) + '%)';
+      photoEffectPreviewUpload.style.filter = 'invert(' + getCalculateSaturation(100, pinLeft) + '%)';
     },
 
     'effect-phobos': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'blur(' + getCalculateSaturation(3) + 'px)';
+      photoEffectPreviewUpload.style.filter = 'blur(' + getCalculateSaturation(3, pinLeft) + 'px)';
     },
 
     'effect-heat': function () {
       onShowSliderClick();
 
-      photoEffectPreviewUpload.style.filter = 'brightness(' + getCalculateSaturation(3) + ')';
+      photoEffectPreviewUpload.style.filter = 'brightness(' + getCalculateSaturation(3, pinLeft) + ')';
     }
   };
 
@@ -80,6 +81,7 @@
   photoEffectUpload.addEventListener('change', function (evt) {
     pinUpload.style.left = '100%';
     valueUpload.style.width = '100%';
+    pinLeft = pinUpload.getBoundingClientRect().left || 455;
 
     onCheckboxEffectChange(evt);
   });
@@ -95,9 +97,17 @@
     });
   });
 
+  var slider = new window.slider.Slider({elem: sliderUpload});
+  slider.init();
+
+  sliderUpload.addEventListener('changeLeft', function (customEvt) {
+    pinLeft = customEvt.detail;
+
+    applyFilter();
+  });
+
   window.applyFilter = {
     photoEffectPreviewUpload: photoEffectPreviewUpload,
-    filteredStyle: filteredStyle,
-    applyFilter: applyFilter
+    filteredStyle: filteredStyle
   };
 })();

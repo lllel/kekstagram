@@ -1,11 +1,10 @@
 'use strict';
 
 (function () {
-  var Slider = function (options, cb) {
+  var Slider = function (options) {
     var self = this;
 
     this.elem = options.elem;
-    this.cb = cb;
     this._thumb = this.elem.querySelector('.upload-effect-level-pin');
     this._fillLine = this.elem.querySelector('.upload-effect-level-val');
     this._emptyLine = this.elem.querySelector('.upload-effect-level-line');
@@ -51,7 +50,10 @@
     this._thumb.style.left = shift.x + 'px';
     this._fillLine.style.width = this._thumb.style.left;
 
-    this.cb();
+    this.elem.dispatchEvent(new CustomEvent('changeLeft', {
+      bubbles: true,
+      detail: parseInt(getComputedStyle(this._thumb).left, 10)
+    }));
   };
 
   Slider.prototype.moveToForKey = function (evtKey) {
@@ -65,7 +67,10 @@
           this._fillLine.style.width = this._thumb.style.left;
         }
 
-        this.cb();
+        this.elem.dispatchEvent(new CustomEvent('changeLeft', {
+          bubbles: true,
+          detail: parseInt(getComputedStyle(this._thumb).left, 10)
+        }));
         break;
 
       case window.util.ButtonKeyCode.ARROW_RIGHT:
@@ -77,7 +82,10 @@
           this._fillLine.style.width = this._thumb.offsetLeft + 'px';
         }
 
-        this.cb();
+        this.elem.dispatchEvent(new CustomEvent('changeLeft', {
+          bubbles: true,
+          detail: parseInt(getComputedStyle(this._thumb).left, 10)
+        }));
         break;
     }
   };
@@ -87,6 +95,7 @@
     this._thumb.addEventListener('keydown', this.onMoveToForKey);
   };
 
-  var slider = new Slider({elem: document.querySelector('.upload-effect-level')}, window.applyFilter.applyFilter);
-  slider.init();
+  window.slider = {
+    Slider: Slider
+  };
 })();
